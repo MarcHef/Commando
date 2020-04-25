@@ -179,10 +179,10 @@ class Argument {
 
 			// Prompt the user for a new value
 			prompts.push(await msg.reply(stripIndents`
-				${empty ? this.prompt : valid ? valid : `You provided an invalid ${this.label}. Please try again.`}
+				${empty ? this.prompt : valid ? valid : `${msg.client.i18n.__('You provided an invalid **{{label}}**.', { label: this.label })} ${msg.client.i18n.__('Please try again.')}`}
 				${oneLine`
-					Respond with \`cancel\` to cancel the command.
-					${wait ? `The command will automatically be cancelled in ${this.wait} seconds.` : ''}
+					${msg.client.i18n.__('Respond with `cancel` to cancel the command.')}
+					${wait ? msg.client.i18n.__('The command will automatically be cancelled in {{wait}} seconds.', { wait: this.wait }) : ''}
 				`}
 			`));
 
@@ -265,21 +265,21 @@ class Argument {
 					const escaped = escapeMarkdown(val).replace(/@/g, '@\u200b');
 					prompts.push(await msg.reply(stripIndents`
 						${valid ? valid : oneLine`
-							You provided an invalid ${this.label},
+							${msg.client.i18n.__('You provided an invalid **{{label}}**.', { label: this.label })}
 							"${escaped.length < 1850 ? escaped : '[too long to show]'}".
-							Please try again.
+							${msg.client.i18n.__('Please try again.')}
 						`}
 						${oneLine`
-							Respond with \`cancel\` to cancel the command, or \`finish\` to finish entry up to this point.
-							${wait ? `The command will automatically be cancelled in ${this.wait} seconds.` : ''}
+							${msg.client.i18n.__('Respond with \`cancel\` to cancel the command, or \`finish\` to finish entry up to this point.')}
+							${wait ? msg.client.i18n.__('The command will automatically be cancelled in {{wait}} seconds.', { wait: this.wait }) : ''}
 						`}
 					`));
 				} else if(results.length === 0) {
 					prompts.push(await msg.reply(stripIndents`
 						${this.prompt}
 						${oneLine`
-							Respond with \`cancel\` to cancel the command, or \`finish\` to finish entry.
-							${wait ? `The command will automatically be cancelled in ${this.wait} seconds, unless you respond.` : ''}
+							${msg.client.i18n.__('Respond with \`cancel\` to cancel the command, or \`finish\` to finish entry up to this point.')}
+							${wait ? msg.client.i18n.__('The command will automatically be cancelled in {{wait}} seconds.', { wait: this.wait }) : ''}
 						`}
 					`));
 				}
