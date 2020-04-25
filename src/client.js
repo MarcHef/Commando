@@ -2,6 +2,7 @@ const discord = require('discord.js');
 const CommandoRegistry = require('./registry');
 const CommandDispatcher = require('./dispatcher');
 const GuildSettingsHelper = require('./providers/helper');
+const i18n = require("i18n");
 
 /**
  * Discord.js Client with a command framework
@@ -58,6 +59,12 @@ class CommandoClient extends discord.Client {
 		 * @private
 		 */
 		this._commandPrefix = null;
+
+		/**
+		 * Lightweight simple translation module
+		 * @type {?}
+		 */
+		this.i18n = i18n;
 
 		// Set up command handling
 		const msgErr = err => { this.emit('error', err); };
