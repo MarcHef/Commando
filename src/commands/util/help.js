@@ -75,7 +75,7 @@ module.exports = class HelpCommand extends Command {
 					${msg.client.i18n.__('Use %s to view detailed information about a specific command.', this.usage('<command>', null, null))}
 					${msg.client.i18n.__('Use %s to view a list of *all* commands, not just available ones.', this.usage('all', null, null))}
 
-					__**${showAll ? msg.client.i18n.__('All commands') : `${msg.client.i18n.__('Available commands in %s', msg.guild || 'DM')}`}**__
+					__**${showAll ? msg.client.i18n.__('All commands') : `${msg.client.i18n.__('Available commands in %s', msg.guild ? msg.guild.name : 'DM')}`}**__
 
 					${groups.filter(grp => grp.commands.some(cmd => !cmd.hidden && (showAll || cmd.isUsable(msg))))
 						.map(grp => stripIndents`
