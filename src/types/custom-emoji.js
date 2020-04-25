@@ -18,9 +18,7 @@ class CustomEmojiArgumentType extends ArgumentType {
 		const exactEmojis = emojis.filter(nameFilterExact(search));
 		if(exactEmojis.size === 1) return true;
 		if(exactEmojis.size > 0) emojis = exactEmojis;
-		return emojis.size <= 15 ?
-			`${disambiguation(emojis.map(emoji => escapeMarkdown(emoji.name)), 'emojis', null)}\n` :
-			'Multiple emojis found. Please be more specific.';
+		return `${disambiguation(msg.client, emojis.map(emoji => escapeMarkdown(emoji.name)), 'emojis', null)}\n`;
 	}
 
 	parse(value, msg) {

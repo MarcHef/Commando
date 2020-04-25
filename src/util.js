@@ -2,9 +2,13 @@ function escapeRegex(str) {
 	return str.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&');
 }
 
-function disambiguation(items, label, property = 'name') {
-	const itemList = items.map(item => `"${(property ? item[property] : item).replace(/ /g, '\xa0')}"`).join(',   ');
-	return `Multiple ${label} found, please be more specific: ${itemList}`;
+function disambiguation(client, items, label, property = 'name', limit = 15) {
+	if(items.length > limit) {
+		return client.i18n.__('Multiple %s found. Please be more specific.', client.i18n.__(label));
+	}
+
+	const itemList = items.map(item => `"${(property ? item[property] : item).replace(/ /g, '\xa0')}"`).join(', ');	
+	return client.i18n.__('Multiple %s found, please be more specific: %s', client.i18n.__(label), itemList);
 }
 
 function paginate(items, page = 1, pageLength = 10) {

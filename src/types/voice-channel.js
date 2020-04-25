@@ -33,11 +33,7 @@ class VoiceChannelArgumentType extends ArgumentType {
 			return true;
 		}
 		if(exactChannels.size > 0) channels = exactChannels;
-		return channels.size <= 15 ?
-			`${disambiguation(
-				channels.map(chan => escapeMarkdown(chan.name)), 'voice channels', null
-			)}\n` :
-			'Multiple voice channels found. Please be more specific.';
+		return `${disambiguation(msg.client, channels.map(chan => escapeMarkdown(chan.name)), 'voice channels', null)}\n`;
 	}
 
 	parse(val, msg) {
