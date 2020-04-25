@@ -252,17 +252,17 @@ class Command {
 		if(ownerOverride && this.client.isOwner(message.author)) return true;
 
 		if(this.ownerOnly && (ownerOverride || !this.client.isOwner(message.author))) {
-			return `The \`${this.name}\` command can only be used by the bot owner.`;
+			return message.client.i18n.__('The `{{name}}` command can only be used by the bot owner.', { name: this.name });
 		}
 
 		if(message.channel.type === 'text' && this.userPermissions) {
 			const missing = message.channel.permissionsFor(message.author).missing(this.userPermissions);
 			if(missing.length > 0) {
 				if(missing.length === 1) {
-					return `The \`${this.name}\` command requires you to have the "${permissions[missing[0]]}" permission.`;
+					return message.client.i18n.__('The `{{name}}` command requires you to have the "{{permission}}" permission.', { name: this.name, permission: permissions[missing[0]] });
 				}
 				return oneLine`
-					The \`${this.name}\` command requires you to have the following permissions:
+					${message.client.i18n.__('The `{{name}}` command requires you to have the following permissions:', { name: this.name })}
 					${missing.map(perm => permissions[perm]).join(', ')}
 				`;
 			}
@@ -304,28 +304,24 @@ class Command {
 	onBlock(message, reason, data) {
 		switch(reason) {
 			case 'guildOnly':
-				return message.reply(`The \`${this.name}\` command must be used in a server channel.`);
+				return message.reply(message.client.i18n.__('The `{{name}}` command must be used in a server channel.', { name: this.name }));
 			case 'nsfw':
-				return message.reply(`The \`${this.name}\` command can only be used in NSFW channels.`);
+				return message.reply(message.client.i18n.__('The `{{name}}` command can only be used in NSFW channels.', { name: this.name }));
 			case 'permission': {
 				if(data.response) return message.reply(data.response);
-				return message.reply(`You do not have permission to use the \`${this.name}\` command.`);
+				return message.reply(message.client.i18n.__('You do not have permission to use the `{{name}}` command.', { name: this.name }));
 			}
 			case 'clientPermissions': {
 				if(data.missing.length === 1) {
-					return message.reply(
-						`I need the "${permissions[data.missing[0]]}" permission for the \`${this.name}\` command to work.`
-					);
+					return message.reply(message.client.i18n.__('I need the "{{permission}}" permission for the `{{name}}` command to work.', { permission: permissions[data.missing[0]], name: this.name }));
 				}
 				return message.reply(oneLine`
-					I need the following permissions for the \`${this.name}\` command to work:
+					${message.client.i18n.__('I need the following permissions for the `{{name}}` command to work:', { name: this.name })}
 					${data.missing.map(perm => permissions[perm]).join(', ')}
 				`);
 			}
 			case 'throttling': {
-				return message.reply(
-					`You may not use the \`${this.name}\` command again for another ${data.remaining.toFixed(1)} seconds.`
-				);
+				return message.reply(message.client.i18n.__('You may not use the `{{name}}` command again for another {{remaining}} seconds.', { name: this.name, remaining: data.remaining.toFixed(1) }));
 			}
 			default:
 				return null;
@@ -351,9 +347,9 @@ class Command {
 
 		const invite = this.client.options.invite;
 		return message.reply(stripIndents`
-			An error occurred while running the command: \`${err.name}: ${err.message}\`
-			You shouldn't ever receive an error like this.
-			Please contact ${ownerList || 'the bot owner'}${invite ? ` in this server: ${invite}` : '.'}
+			${message.client.i18n.__('An error occurred while running the command: `{{name}}: {{message}}`', { name: err.name, message: err.message })}
+			${message.client.i18n.__('You shouldn\'t ever receive an error like this.')}
+			${message.client.i18n.__('Please contact {{ownerList}}', { ownerList: ownerList || 'the bot owner' })}${invite ? ` ${message.client.i18n.__('in this server: {{invite}}', { invite: invite })}` : '.'}
 		`);
 	}
 
