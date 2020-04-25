@@ -488,7 +488,9 @@ class Command {
 		let mentionPart;
 		if(user) mentionPart = `\`\`@${user.username.replace(/ /g, '\xa0')}#${user.discriminator}\xa0${nbcmd}\`\``;
 
-		return `${prefixPart || ''}${prefix && user ? ' or ' : ''}${mentionPart || ''}`;
+		let or = ' '+user.client.i18n.__('or')+' ';
+
+		return `${prefixPart || ''}${prefix && user ? or : ''}${mentionPart || ''}`;
 	}
 
 	/**
